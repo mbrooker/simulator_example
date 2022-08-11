@@ -1,6 +1,5 @@
 from os import O_NONBLOCK
 
-
 class NRetriesStrategy:
     def __init__(self, N):
         self.N = N

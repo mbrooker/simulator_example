@@ -32,53 +32,11 @@ class Stats(object):
     def header():
         print("failure_rate,successes,total_calls,unique_calls,name")
 
-class Client(object):
-    def __init__(self, retry_strategy, rate_rps, server, stats):
-        self.retry_strategy = retry_strategy
-        self.rate = rate_rps
-        self.server = server
-        self.stats = stats
 
-    def gen_load(self, _payload, t):
-        call = Call(self.retry_strategy, self.server, self.stats)
-        if drain:
-            return [] 
-        else: 
-            return [(t + random.expovariate(self.rate), self.gen_load, None),
-                    (t, call.start, None)]
 
-class Call(object):
-    def __init__(self, retry_strategy, server, stats):
-        self.retry_strategy = retry_strategy.new_call()
-        self.server = server
-        self.stats = stats
 
-    def start(self, _payload, t):
-        self.retry_strategy.start()
-        self.stats.first_try()
-        return [(t + net_rtt(), self.server.handle, self)]
-        
 
-    def done_success(self, _payload, t):
-        self.stats.success()
-        return []
 
-    def done_failure(self, _payload, t):
-        if self.retry_strategy.should_retry():
-            self.stats.retry()
-            return [(t + net_rtt(), self.server.handle, self)]
-        else:
-            return []
-
-class Server(object):
-    def __init__(self, failure_rate):
-        self.failure_rate = failure_rate
-
-    def handle(self, call, t):
-        if random.random() > self.failure_rate:
-            return [(t + net_rtt(), call.done_success, None)]
-        else:
-            return [(t + net_rtt(), call.done_failure, None)]
         
 def sim_loop(clients, max_t):
     global drain
@@ -91,6 +49,7 @@ def sim_loop(clients, max_t):
         heapq.heapify(q)
         drain = t > max_t
 
+# Simulation for "Simulating Performance" on https://brooker.co.za/blog/2022/02/28/retries.html
 def run_sims(max_t):
     n_clients = 100
     rate_per_client = 10.0
@@ -108,6 +67,7 @@ def run_sims(max_t):
             sim_loop(clients, max_t)
             stats.print()
 
+# Simulation for "The effect of client count" on https://brooker.co.za/blog/2022/02/28/retries.html
 def run_sims_clients(max_t):
     rate = 1000.0
 
