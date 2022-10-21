@@ -3,7 +3,7 @@ This is a small example of the kind of small numerical simulator I often write a
 
 ## Usage
 
-   python3 ski_sim.py | tee results.png
+    python3 ski_sim.py | tee results.csv
 
 This type of code runs multiple times faster with [Pypy](https://www.pypy.org/) than it does with standard python.
 
