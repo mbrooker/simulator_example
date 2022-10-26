@@ -90,6 +90,14 @@ class NudgeQueue(FCFSQueue):
     def name(self):
         return "Nudge"
 
+# Last In First Out (LIFO) Queue (aka, a stack)
+class LIFOQueue(FCFSQueue):
+    def pop(self):
+        return self.deque.pop()
+
+    def name(self):
+        return "LIFO"
+
 # The single server. All this does is service one request at a time from the queue.
 class Server(object):
     def __init__(self, queue, sim_name):
@@ -151,8 +159,8 @@ def sim_loop(max_t, client):
 
 def run_sims(max_t):
     print("t,service_time,q_time,name")
-    for q_type in [FCFSQueue, NudgeQueue]:
-        for rho in [0.1, 0.5, 0.8]:
+    for q_type in [LIFOQueue, FCFSQueue, NudgeQueue]:
+        for rho in [0.5, 0.8]:
             queue = q_type()
             server = Server(queue, "%s_%.2f"%(queue.name(), rho))
             client = Client(rho, server)
