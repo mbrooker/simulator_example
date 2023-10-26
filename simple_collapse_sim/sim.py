@@ -1,3 +1,15 @@
+# Simulate the behavior of a simple system consisting of a set of clients, and a server
+#  with latency that depends on the number of concurrent requests it is processing.
+# The goal of the simulator is to show that the simple combination of timeout and retry,
+#  even with backoff, leads to unstable system behavior in open systems.
+#
+#                 ┌────────────┐                              
+#                 │┌───────────┴┐       ┌────────────────────┐
+#   Poisson       ││  Clients   │       │       Server       │
+#   Arrival  ─────▶│  (retry 3  │──────▶│ (latency increase  │
+#   Process       └┤   times)   │       │ with concurrency)  │
+#                  └────────────┘       └────────────────────┘
+
 import random
 import heapq
 from dataclasses import dataclass
