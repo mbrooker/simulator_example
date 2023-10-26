@@ -256,7 +256,7 @@ def make_sim_weibull():
     clients = []
     job_name = "weibull"
     job_type =  weibull_job(mean_t, shape)
-    
+
     for name, client in [
         ("%s_open"%(job_name), OpenLoopClient(rho, job_type)),
         ("%s_closed_1"%(job_name), ClosedLoopClient(rho, job_type, 1)),
